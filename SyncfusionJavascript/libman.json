@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "unpkg",
+      "library": "@syncfusion/ej2-base@19.4.38",
+      "destination": "wwwroot/lib/syncfusion/ej2-base/"
+    }
+  ]
+}
