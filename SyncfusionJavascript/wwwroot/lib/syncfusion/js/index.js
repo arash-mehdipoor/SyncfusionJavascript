@@ -1,7 +1,31 @@
-﻿ 
-
+﻿
 ej.base.enableRipple(window.ripple)
 
+ 
+
+ej.base.L10n.load({
+    'fa-IR': {
+        'grid': {
+            'EmptyRecord': 'Keine Aufzeichnungen angezeigt',
+            'GroupDropArea': 'Ziehen Sie einen Spaltenkopf hier, um die Gruppe ihre Spalte',
+            'UnGroup': 'Klicken Sie hier, um die Gruppierung aufheben',
+            'EmptyDataSourceError': 'DataSource darf bei der Erstauslastung nicht leer sein, da Spalten aus der dataSource im AutoGenerate Spaltenraster',
+            'Item': 'Artikel',
+            'Items': 'Artikel',
+            'Columns':'ستون'
+        },
+        'pager': {
+            'currentPageInfo': '{0} از {1} صفحه',
+            'totalItemsInfo': '({0} پست)',
+            'firstPageTooltip': 'به صفحه اول',
+            'lastPageTooltip': 'تا صفحه آخر',
+            'nextPageTooltip': 'به صفحه بعد',
+            'previousPageTooltip': 'بازگشت به صفحه آخر',
+            'nextPagerTooltip': 'به صفحه بعدی',
+            'previousPagerTooltip': 'به صفحه قبلی بروید'
+        }
+    }
+});
  
 var grid = new ej.grids.Grid({
     dataSource: getTradeData(100),
@@ -12,7 +36,7 @@ var grid = new ej.grids.Grid({
     pageSettings: { pageCount: 5 },
     allowResizing: true,
     allowRowDragAndDrop: true,
-    //locale: 'ar-AE',
+    locale: 'fa-IR',
     enableRtl: true,
     //allowTextWrap: true,
     toolbar: ['Search'],
