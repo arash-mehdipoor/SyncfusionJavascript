@@ -1,19 +1,27 @@
 ﻿
 ej.base.enableRipple(window.ripple)
 
- 
+
 
 ej.base.L10n.load({
     'fa-IR': {
         'grid': {
-            'EmptyRecord': 'Keine Aufzeichnungen angezeigt',
-            'GroupDropArea': 'Ziehen Sie einen Spaltenkopf hier, um die Gruppe ihre Spalte',
-            'UnGroup': 'Klicken Sie hier, um die Gruppierung aufheben',
-            'EmptyDataSourceError': 'DataSource darf bei der Erstauslastung nicht leer sein, da Spalten aus der dataSource im AutoGenerate Spaltenraster',
-            'Item': 'Artikel',
-            'Items': 'Artikel',
-            'Columns':'ستون'
+            'EmptyRecord': 'هیچ رکوردی برای نمایش وجود ندارد',
+            'Columnchooser': 'ستون',
+            'ChooseColumns': 'ستون ها را انتخاب کنید',
+            'SelectAll':'انتخاب همه',
+            'Search': 'جستجو',
+            'ClearButton':'پاک کردن',
+            'FilterButton':'فیلتر',
+            'OKButton':'اعمال',
+            'CancelButton':'بستن',
+            'Pdfexport':'خروجی PDF',
+            'Excelexport':'خروجی Excele',
+            'Wordexport':'خروجی Worde',
+            'Csvexport': 'خروجی Csvex',
+            'Save':'ذخیره'
         },
+      
         'pager': {
             'currentPageInfo': '{0} از {1} صفحه',
             'totalItemsInfo': '({0} پست)',
@@ -26,7 +34,7 @@ ej.base.L10n.load({
         }
     }
 });
- 
+
 var grid = new ej.grids.Grid({
     dataSource: getTradeData(100),
     allowSelection: true,
@@ -327,7 +335,7 @@ function queryCellInfo(args) {
             args.cell.querySelector(".statusButton").classList.add("btn-danger");
         }
     }
-   //if (args.column.field === "id") {
+    //if (args.column.field === "id") {
     //    if (args.data.Software <= 20) {
     //        args.data.Software = args.data.Software + 30;
     //    }
@@ -380,7 +388,7 @@ document.getElementById('Grid').addEventListener('DOMSubtreeModified', function 
         msgEle.classList.remove('e-hide');
     }
 
-  
+
 });
 
 
