@@ -46,11 +46,11 @@ namespace SyncfusionJavascript.Controllers
             return RedirectToAction(nameof(SyncfusionTable));
         }
 
-        public JsonResult SyncfusionData(string skip , string var)
+        public JsonResult SyncfusionData()
         {
             var data = dbContext.OrderDetails.ToList().Take(10);
 
-            return Json(new { data });
+            return Json(new {result = data });
         }
 
 

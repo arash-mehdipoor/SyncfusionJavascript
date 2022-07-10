@@ -39,23 +39,18 @@ ej.base.L10n.load({
 });
 
 
-var tradeData = [];
+ 
 var data = new ej.data.DataManager({
     url: 'https://localhost:7056/Home/SyncfusionData',
     adaptor: new ej.data.ODataAdaptor(),
     crossDomain: true
-}).executeQuery(new ej.data.Query().take(8)).then((e) => {
-    //e.result will contain the records
-    for (var i = 0; i < e.result.data.length; i++) {
-        tradeData.push(e.result.data[i]);
-    } 
-});
+})
 
 
 
 
 var grid = new ej.grids.Grid({
-    dataSource: tradeData /*getTradeData(100)*/,
+    dataSource: data /*getTradeData(100)*/,
     allowSelection: true,
     allowFiltering: true,
     allowSorting: true,
