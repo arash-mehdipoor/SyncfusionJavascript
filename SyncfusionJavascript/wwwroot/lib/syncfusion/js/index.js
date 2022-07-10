@@ -39,25 +39,39 @@ ej.base.L10n.load({
 });
 
 
+var tdata = [];
  
-var data = new ej.data.DataManager({
+var dataSource = new ej.data.DataManager({
     url: 'https://localhost:7056/Home/SyncfusionData',
     adaptor: new ej.data.ODataAdaptor(),
     crossDomain: true
-})
+});
+
+var query = new ej.data.Query()
+    .addParams('take', 10)
+    .addParams('skip', 0);
+
+var res = dataSource.executeQuery(query);
+
+res.then((e) => {
+    debugger
+    e.result.data.forEach(function (item) {
+        tdata.push(item);
+    });
+});
 
 
-
+ 
 
 var grid = new ej.grids.Grid({
-    dataSource: data /*getTradeData(100)*/,
+    dataSource: tdata /*getTradeData(100)*/,
     allowSelection: true,
     allowFiltering: true,
     allowSorting: true,
     allowPaging: true,
-    //pageSettings: { pageCount: 5 },
     allowResizing: true,
     allowRowDragAndDrop: true,
+    pageSettings: { pageSize: 5, pageCount: 3 },
     locale: 'fa-IR',
     enableRtl: true,
     //allowTextWrap: true,
@@ -65,7 +79,7 @@ var grid = new ej.grids.Grid({
     enableStickyHeader: true,
     //enableVirtualization: true,
     //enableColumnVirtualization: true,
-    showColumnChooser: true,
+    //showColumnChooser: true,
     //enableAdaptiveUI: true,
     enableVirtualization: false,
     allowExcelExport: true,
@@ -80,15 +94,14 @@ var grid = new ej.grids.Grid({
     rowHeight: 60,
     columns: getColumns(),
     queryCellInfo: queryCellInfo,
-    dataBound: startTimer,
-    actionComplete: complete,
-    pageSettings: { pageSize: 7, pageCount: 5 },
     dataBound: Bound,
     actionBegin: begin,
+    actionComplete: complete
+
 });
 var dReady = false;
 var dtTime = false;
-var isDataBound = false;
+var isDataBound = true;
 var isDataChanged = true;
 var intervalFun;
 var clrIntervalFun;
@@ -418,11 +431,39 @@ function Bound(e) {
     pager.click = function (args) {
         old.call(this, args);
         // here you can add conditions 
-        args.cancel = true;  // cancels the pager refresh  
+        //args.cancel = true;  // cancels the pager refresh  
     };
 }
-function begin(e) {
-    if (e.requestType === 'paging') {
+function begin(args) {
+    debugger
+    if (args.requestType === 'paging') {
+        //this.query = new ej.data.Query()
+        //    .addParams('take', 2)
+        //    .addParams('skip', 10);
+
+        tdata = [];
+
+        var dataSource = new ej.data.DataManager({
+            url: 'https://localhost:7056/Home/SyncfusionData',
+            adaptor: new ej.data.ODataAdaptor(),
+            crossDomain: true
+        });
+
+        var query = new ej.data.Query()
+            .addParams('take', 2)
+            .addParams('skip', 10);
+
+        var res = dataSource.executeQuery(query);
+
+        res.then((e) => {
+            e.result.data.forEach(function (item) {
+                tdata.push(item);
+            });
+        });
+
+       /* this.properties.dataSource = tdata;*/
+        console.log(this.properties)
         //e.cancel = true; // cancels the grid paging 
+         
     }
 }
