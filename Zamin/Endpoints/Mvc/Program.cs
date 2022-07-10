@@ -1,27 +1,34 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using SampleApp.Infra.Data.Commands;
+using SampleApp.Infra.Data.Queries;
+using Zamin.EndPoints.Web;
+using Zamin.EndPoints.Web.StartupExtentions;
+using Zamin.Utilities.Configurations;
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+var builder = new ZaminProgram().Main(args, "appsettings.json", "appsettings.zamin.json", "appsettings.serilog.json");
 
+//Configuration
+ConfigurationManager Configuration = builder.Configuration;
+builder.Services.AddZaminApiServices(Configuration);
+
+var dbPathOption = GetDbPathOption();
+builder.Services.AddDbContext<SampleAppQueryDbContext>(dbPathOption);
+builder.Services.AddDbContext<SampleAppCommandDbContext>(dbPathOption);
+
+//Middlewares
 var app = builder.Build();
+var zaminOptions = app.Services.GetRequiredService<ZaminConfigurationOptions>();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseZaminApiConfigure(zaminOptions, app.Environment);
 
 app.Run();
+
+static Action<DbContextOptionsBuilder> GetDbPathOption()
+{
+    string startupPath = Environment.CurrentDirectory;
+    var dbPath = Path.Join(startupPath, "AppDataBase.sqlite");
+
+    //var projectPath = Directory.GetParent(startupPath).Parent.Parent.FullName;
+
+    return c => c.UseSqlite($"Data Source= {dbPath}");
+}
