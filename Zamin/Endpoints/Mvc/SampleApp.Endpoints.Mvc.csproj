@@ -6,4 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\ApplicationService\SampleApp.Core.ApplicationService.csproj" />
+    <ProjectReference Include="..\..\Core\Contracts\SampleApp.Core.Contracts.csproj" />
+    <ProjectReference Include="..\..\Core\Domain\SampleApp.Core.Domain.csproj" />
+    <ProjectReference Include="..\..\Infra\Data\SampleApp.Infra.Data.csproj" />
+  </ItemGroup>
+
 </Project>
