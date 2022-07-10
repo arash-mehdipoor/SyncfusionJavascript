@@ -17,13 +17,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+ 
 app.UseStaticFiles();
-app.UseCors(c =>
-{
-    c.AllowAnyOrigin();
-});
-app.UseRouting();
+ 
 
 app.UseAuthorization();
 

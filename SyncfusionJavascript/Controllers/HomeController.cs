@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SyncfusionJavascript.Context;
 using SyncfusionJavascript.Models;
-using System.Diagnostics;
 
 namespace SyncfusionJavascript.Controllers
 {
+
     public class HomeController : Controller
     {
+
         private readonly ILogger<HomeController> _logger;
         private readonly SyncfusionDbContext dbContext;
 
@@ -46,11 +46,11 @@ namespace SyncfusionJavascript.Controllers
             return RedirectToAction(nameof(SyncfusionTable));
         }
 
-        public JsonResult SyncfusionData()
+        public JsonResult SyncfusionData([FromQuery] int take,int skip)
         {
-            var data = dbContext.OrderDetails.ToList().Take(10);
-
-            return Json(new {result = data });
+            var data = dbContext.OrderDetails.ToList().Skip(skip).Take(take);
+            var json = Json(new { data });
+            return json;
         }
 
 
