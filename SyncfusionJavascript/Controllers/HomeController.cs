@@ -46,7 +46,7 @@ namespace SyncfusionJavascript.Controllers
             return RedirectToAction(nameof(SyncfusionTable));
         }
 
-        public JsonResult SyncfusionData()
+        public JsonResult SyncfusionData(string skip , string var)
         {
             var data = dbContext.OrderDetails.ToList().Take(10);
 

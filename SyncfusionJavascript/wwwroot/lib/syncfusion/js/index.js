@@ -44,6 +44,11 @@ var data = new ej.data.DataManager({
     url: 'https://localhost:7056/Home/SyncfusionData',
     adaptor: new ej.data.ODataAdaptor(),
     crossDomain: true
+}).executeQuery(new ej.data.Query().take(8)).then((e) => {
+    //e.result will contain the records
+    for (var i = 0; i < e.result.data.length; i++) {
+        tradeData.push(e.result.data[i]);
+    } 
 });
 
 
