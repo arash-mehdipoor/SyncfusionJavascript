@@ -19,39 +19,42 @@ namespace SyncfusionJavascript.Controllers
 
         public IActionResult SeedData()
         {
-            
-                List<OrderDetail> ordersDetails = new List<OrderDetail>();
 
-                if (ordersDetails.Count() == 0)
+            List<OrderDetail> ordersDetails = new List<OrderDetail>();
+
+            if (ordersDetails.Count() == 0)
+            {
+                int code = 100;
+                for (int i = 1; i < 100; i++)
                 {
-                    int code = 100;
-                    for (int i = 1; i < 1; i++)
+                    ordersDetails.Add(new OrderDetail()
                     {
-                        ordersDetails.Add(new OrderDetail()
-                        {
-                            FirstName = $"آرش {i}",
-                            LastName = $"مهدی پور {i}",
-                            Address = $"تهران,تهران {i}",
-                            Age = 29,
-                            Birthdate = DateTime.Now,
-                            City = "تهران",
-                            Status = i % code == 0 ? true : false,
-                        });
-                        code += 5;
-                    }
+                        FirstName = $"آرش {i}",
+                        LastName = $"مهدی پور {i}",
+                        Address = $"تهران,تهران {i}",
+                        Age = 29,
+                        Birthdate = DateTime.Now,
+                        City = "تهران",
+                        Status = i % code == 0 ? true : false,
+                    });
+                    code += 5;
                 }
-                dbContext.OrderDetails.AddRange(ordersDetails);
-                dbContext.SaveChanges();
-         
+            }
+            dbContext.OrderDetails.AddRange(ordersDetails);
+            dbContext.SaveChanges();
+
             return RedirectToAction(nameof(SyncfusionTable));
         }
 
         public JsonResult SyncfusionData()
         {
-            var data = dbContext.OrderDetails.ToList();
-            var dataJson = JsonConvert.SerializeObject(data,Formatting.Indented); 
-            return Json(data);
+            var data = dbContext.OrderDetails.ToList().Take(10);
+
+            return Json(new { data = data });
         }
+
+
+
 
         public IActionResult SyncfusionTable()
         {

@@ -1,4 +1,5 @@
 ﻿
+
 ej.base.enableRipple(window.ripple)
 
 
@@ -9,19 +10,19 @@ ej.base.L10n.load({
             'EmptyRecord': 'هیچ رکوردی برای نمایش وجود ندارد',
             'Columnchooser': 'ستون',
             'ChooseColumns': 'ستون ها را انتخاب کنید',
-            'SelectAll':'انتخاب همه',
+            'SelectAll': 'انتخاب همه',
             'Search': 'جستجو',
-            'ClearButton':'پاک کردن',
-            'FilterButton':'فیلتر',
-            'OKButton':'اعمال',
-            'CancelButton':'بستن',
-            'Pdfexport':'خروجی PDF',
-            'Excelexport':'خروجی Excele',
-            'Wordexport':'خروجی Worde',
+            'ClearButton': 'پاک کردن',
+            'FilterButton': 'فیلتر',
+            'OKButton': 'اعمال',
+            'CancelButton': 'بستن',
+            'Pdfexport': 'خروجی PDF',
+            'Excelexport': 'خروجی Excele',
+            'Wordexport': 'خروجی Worde',
             'Csvexport': 'خروجی Csvex',
-            'Save':'ذخیره'
+            'Save': 'ذخیره'
         },
-      
+
         'pager': {
             'currentPageInfo': '{0} از {1} صفحه',
             'totalItemsInfo': '({0} پست)',
@@ -30,18 +31,36 @@ ej.base.L10n.load({
             'nextPageTooltip': 'به صفحه بعد',
             'previousPageTooltip': 'بازگشت به صفحه آخر',
             'nextPagerTooltip': 'به صفحه بعدی',
-            'previousPagerTooltip': 'به صفحه قبلی بروید'
+            'previousPagerTooltip': 'به صفحه قبلی بروید',
+            'currentPageInfo': '',
+            'totalItemsInfo': '{1} to {2} of {0}',
         }
     }
 });
 
+
+var tradeData = [];
+var data = new ej.data.DataManager({
+    url: 'https://localhost:7056/Home/SyncfusionData',
+    adaptor: new ej.data.ODataAdaptor(),
+    crossDomain: true
+}).executeQuery(new ej.data.Query().take(8)).then((e) => {
+    //e.result will contain the records
+    for (var i = 0; i < e.result.data.length; i++) {
+        tradeData.push(e.result.data[i]);
+    } 
+});
+
+
+
+
 var grid = new ej.grids.Grid({
-    dataSource: getTradeData(100),
+    dataSource: tradeData /*getTradeData(100)*/,
     allowSelection: true,
     allowFiltering: true,
     allowSorting: true,
     allowPaging: true,
-    pageSettings: { pageCount: 5 },
+    //pageSettings: { pageCount: 5 },
     allowResizing: true,
     allowRowDragAndDrop: true,
     locale: 'fa-IR',
@@ -67,7 +86,10 @@ var grid = new ej.grids.Grid({
     columns: getColumns(),
     queryCellInfo: queryCellInfo,
     dataBound: startTimer,
-    actionComplete: complete
+    actionComplete: complete,
+    pageSettings: { pageSize: 7, pageCount: 5 },
+    dataBound: Bound,
+    actionBegin: begin,
 });
 var dReady = false;
 var dtTime = false;
@@ -265,6 +287,7 @@ function getPdfExportProperties() {
 // excel
 
 function complete(args) {
+
     if (args.requestType === "filterchoicerequest") {
         if (args.filterModel.options.field === "Trustworthiness" || args.filterModel.options.field === "Rating" || args.filterModel.options.field === "Status") {
             var span = args.filterModel.dialogObj.element.querySelectorAll('.e-selectall')[0];
@@ -273,6 +296,10 @@ function complete(args) {
             }
         }
     }
+
+    //if (args.requestType === "paging") {
+
+    //}
 }
 
 window.trustTemp = function (e) {
@@ -346,8 +373,6 @@ function queryCellInfo(args) {
     //    }
     //}
 }
-
-
 function startTimer(args) {
     clearTimeout(clrIntervalFun);
     clearInterval(intervalFun);
@@ -360,7 +385,6 @@ function valueChange() {
     var index = listObj.value;
     clearTimeout(clrIntervalFun2);
     clrIntervalFun2 = setTimeout(function () {
-        debugger
         isDataChanged = true;
         stTime = null;
         var contentElement = grid.contentModule.getPanel().firstChild;
@@ -392,3 +416,18 @@ document.getElementById('Grid').addEventListener('DOMSubtreeModified', function 
 });
 
 
+
+function Bound(e) {
+    var pager = document.getElementsByClassName('e-gridpager')[0].ej2_instances[0];
+    var old = pager.click;
+    pager.click = function (args) {
+        old.call(this, args);
+        // here you can add conditions 
+        args.cancel = true;  // cancels the pager refresh  
+    };
+}
+function begin(e) {
+    if (e.requestType === 'paging') {
+        //e.cancel = true; // cancels the grid paging 
+    }
+}

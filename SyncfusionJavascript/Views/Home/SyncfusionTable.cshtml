@@ -27,7 +27,7 @@
                                     <span id="msg"></span>
                                     <br>
                                 </div>
-
+ 
                                 <div id="Grid">
                                 </div>
                             </div>
@@ -41,9 +41,12 @@
 </div>
 
 
+
+
+
 @section Scripts {
 <script src="~/lib/syncfusion/js/ej2.min.js"></script>
-
+ 
 
 <script type="text/x-jsrender" id="statusTemplate">
     <div id="myStatus" class="pbar">
@@ -59,21 +62,7 @@
           </div>
 </script>
 
-<script>
-        window.getTradeData = function(dataCount) {
-             if (typeof dataCount === 'string') {
-                dataCount = parseInt(dataCount);
-             }
-            var tradeData = [];
-             var StockList =@Html.Raw(Json.Serialize(@Model));
-
-            for (var i = 0; i < dataCount; i++) {
-                tradeData.push(StockList[i]);
-            }
-            return tradeData;
-       };
-
-
+<script> 
     const getColumns = function() {
         var columns = [
                 { type: 'checkbox', width: '25' },
