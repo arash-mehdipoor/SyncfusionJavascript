@@ -13,17 +13,7 @@
                     <div class="control-section">
                         <div class="control-section">
                             <div class="content-wrapper">
-                                <div style="padding-bottom: 10px;">
-                                    <select id="ddl">
-                                        @{
-                                            var count = Model?.Count;
-                                            var halfData = count / 2;
-                                            var partData = 50;
-                                        }
-                                        <option value="@partData">@partData سطر نمایش داده شود</option>
-                                        <option value="@halfData">@halfData نمایش  بخشی از دیتا</option>
-                                        <option value="@count">@count نمایش کل دیتا</option>
-                                    </select>
+                                <div style="padding-bottom: 10px;"> 
                                     <span id="msg"></span>
                                     <br>
                                 </div>

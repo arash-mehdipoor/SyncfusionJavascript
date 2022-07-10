@@ -1,8 +1,11 @@
 ﻿
 
+
+
+
+
+
 ej.base.enableRipple(window.ripple)
-
-
 
 ej.base.L10n.load({
     'fa-IR': {
@@ -39,39 +42,17 @@ ej.base.L10n.load({
 });
 
 
-var tdata = [];
- 
-var dataSource = new ej.data.DataManager({
-    url: 'https://localhost:7056/Home/SyncfusionData',
-    adaptor: new ej.data.ODataAdaptor(),
-    crossDomain: true
-});
 
-var query = new ej.data.Query()
-    .addParams('take', 10)
-    .addParams('skip', 0);
-
-var res = dataSource.executeQuery(query);
-
-res.then((e) => {
-    debugger
-    e.result.data.forEach(function (item) {
-        tdata.push(item);
-    });
-});
-
-
- 
 
 var grid = new ej.grids.Grid({
-    dataSource: tdata /*getTradeData(100)*/,
+    dataSource: getData(10,0),
     allowSelection: true,
     allowFiltering: true,
     allowSorting: true,
     allowPaging: true,
     allowResizing: true,
     allowRowDragAndDrop: true,
-    pageSettings: { pageSize: 5, pageCount: 3 },
+    pageSettings: { currentPage: 1, pageSize: 5, pageCount:5, pageSizes: false },
     locale: 'fa-IR',
     enableRtl: true,
     //allowTextWrap: true,
@@ -96,9 +77,19 @@ var grid = new ej.grids.Grid({
     queryCellInfo: queryCellInfo,
     dataBound: Bound,
     actionBegin: begin,
-    actionComplete: complete
+    actionComplete: complete,
+    //load: () => {
+    //    let rowHeight = grid.getRowHeight();  //height of the each row
+    //    let gridHeight= grid.height;  //grid height
+    //    let pageSize= grid.pageSettings.pageSize;   //initial page size
+    //    let pageResize= (gridHeight - (pageSize * rowHeight)) / rowHeight; //new page size is obtained here
+    //    grid.pageSettings.pageSize = pageSize + Math.round(pageResize);
+    //}
 
 });
+
+
+
 var dReady = false;
 var dtTime = false;
 var isDataBound = true;
@@ -115,14 +106,6 @@ grid.appendTo('#Grid');
 grid.on('data-ready', function () {
     dReady = true;
 });
-var listObj = new ej.dropdowns.DropDownList({
-    index: 0,
-    placeholder: 'Select a Data Range',
-    popupHeight: '240px',
-    width: '220px',
-    change: function () { valueChange(); }
-});
-listObj.appendTo('#ddl');
 
 // excel
 grid.toolbarClick = function (args) {
@@ -139,6 +122,8 @@ grid.toolbarClick = function (args) {
 var date = '';
 date += ((new Date()).getMonth().toString()) + '/' + ((new Date()).getDate().toString());
 date += '/' + ((new Date()).getFullYear().toString());
+
+
 
 function getExcelExportProperties() {
     return {
@@ -387,6 +372,7 @@ function startTimer(args) {
     dtTime = true;
 }
 function valueChange() {
+    debugger
     listObj.closePopup();
     grid.showSpinner();
     dropSlectedIndex = null;
@@ -426,44 +412,50 @@ document.getElementById('Grid').addEventListener('DOMSubtreeModified', function 
 
 
 function Bound(e) {
-    var pager = document.getElementsByClassName('e-gridpager')[0].ej2_instances[0];
-    var old = pager.click;
-    pager.click = function (args) {
-        old.call(this, args);
-        // here you can add conditions 
-        //args.cancel = true;  // cancels the pager refresh  
-    };
+    
 }
+
+
+// paging
 function begin(args) {
-    debugger
-    if (args.requestType === 'paging') {
-        //this.query = new ej.data.Query()
-        //    .addParams('take', 2)
-        //    .addParams('skip', 10);
+  
+    if (args.requestType === 'paging') { 
+        var skip = (grid.pageSettings.currentPage - 1) * grid.pageSettings.pageSize;
+        var take = grid.pageSettings.pageSize; 
+        getData(take,skip)  
+        args.cancel = true;
 
-        tdata = [];
-
-        var dataSource = new ej.data.DataManager({
-            url: 'https://localhost:7056/Home/SyncfusionData',
-            adaptor: new ej.data.ODataAdaptor(),
-            crossDomain: true
-        });
-
-        var query = new ej.data.Query()
-            .addParams('take', 2)
-            .addParams('skip', 10);
-
-        var res = dataSource.executeQuery(query);
-
-        res.then((e) => {
-            e.result.data.forEach(function (item) {
-                tdata.push(item);
-            });
-        });
-
-       /* this.properties.dataSource = tdata;*/
-        console.log(this.properties)
-        //e.cancel = true; // cancels the grid paging 
-         
+        //console.log(`currentPage : ${grid.pageSettings.currentPage}`);
+        //console.log(`pageCount : ${grid.pageSettings.pageCount}`);
+        //console.log(`pageSize : ${grid.pageSettings.pageSize}`);
     }
 }
+
+
+
+function getData(take = 20, skip = 0) {
+    var tdata = [];
+
+    var dataSource = new ej.data.DataManager({
+        url: 'https://localhost:7056/Home/SyncfusionData',
+        adaptor: new ej.data.ODataAdaptor(),
+        crossDomain: true
+    });
+
+    var query = new ej.data.Query()
+        .addParams('take', take)
+        .addParams('skip', skip);
+
+    var res = dataSource.executeQuery(query);
+
+    res.then((e) => { 
+        e.result.result.forEach(function (item) {
+            tdata.push(item);
+        });
+        tdata.length = e.result.count;
+        grid.dataSource = tdata;
+        console.log(tdata)
+    });
+}
+ 
+// paging
