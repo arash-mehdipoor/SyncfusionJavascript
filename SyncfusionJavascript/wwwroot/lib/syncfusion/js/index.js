@@ -42,17 +42,29 @@ ej.base.L10n.load({
 });
 
 
-
+var updateTemplate = function () {
+    this.numeric = new ej.inputs.NumericTextBox({
+        min: 1,
+        max: 3,
+        step: 1,
+        format: '###.##',
+        change: (args) => {
+            var value = args.value;
+            grid.goToPage(value);
+        }
+    });
+    this.numeric.appendTo('#currentPage');
+};
 
 var grid = new ej.grids.Grid({
-    dataSource: getData(10,0),
+    dataSource: getData(10, 0),
     allowSelection: true,
     allowFiltering: true,
     allowSorting: true,
     allowPaging: true,
     allowResizing: true,
     allowRowDragAndDrop: true,
-    pageSettings: { currentPage: 1, pageSize: 5, pageCount:5, pageSizes: false },
+    pageSettings: { currentPage: 1, pageSize: 5, pageCount: 5, pageSizes: false },
     locale: 'fa-IR',
     enableRtl: true,
     //allowTextWrap: true,
@@ -77,15 +89,7 @@ var grid = new ej.grids.Grid({
     queryCellInfo: queryCellInfo,
     dataBound: Bound,
     actionBegin: begin,
-    actionComplete: complete,
-    //load: () => {
-    //    let rowHeight = grid.getRowHeight();  //height of the each row
-    //    let gridHeight= grid.height;  //grid height
-    //    let pageSize= grid.pageSettings.pageSize;   //initial page size
-    //    let pageResize= (gridHeight - (pageSize * rowHeight)) / rowHeight; //new page size is obtained here
-    //    grid.pageSettings.pageSize = pageSize + Math.round(pageResize);
-    //}
-
+    actionComplete: complete
 });
 
 
@@ -280,7 +284,7 @@ function getPdfExportProperties() {
 // excel
 
 function complete(args) {
-
+    debugger
     if (args.requestType === "filterchoicerequest") {
         if (args.filterModel.options.field === "Trustworthiness" || args.filterModel.options.field === "Rating" || args.filterModel.options.field === "Status") {
             var span = args.filterModel.dialogObj.element.querySelectorAll('.e-selectall')[0];
@@ -288,11 +292,7 @@ function complete(args) {
                 ej.base.closest(span, '.e-ftrchk').classList.add("e-hide");
             }
         }
-    }
-
-    //if (args.requestType === "paging") {
-
-    //}
+    } 
 }
 
 window.trustTemp = function (e) {
@@ -354,17 +354,7 @@ function queryCellInfo(args) {
         else {
             args.cell.querySelector(".statusButton").classList.add("btn-danger");
         }
-    }
-    //if (args.column.field === "id") {
-    //    if (args.data.Software <= 20) {
-    //        args.data.Software = args.data.Software + 30;
-    //    }
-    //    args.cell.querySelector(".bar").style.width = args.data.id + "%";
-    //    args.cell.querySelector(".barlabel").textContent = args.data.id + "%";
-    //    if (args.data.status === "Inactive") {
-    //        args.cell.querySelector(".bar").classList.add("progressdisable");
-    //    }
-    //}
+    } 
 }
 function startTimer(args) {
     clearTimeout(clrIntervalFun);
@@ -411,34 +401,26 @@ document.getElementById('Grid').addEventListener('DOMSubtreeModified', function 
 
 
 
-function Bound(e) {
-    
+function Bound(e) { 
+    var pager = document.getElementsByClassName('e-gridpager')[0].ej2_instances[0]; 
+    pager.click = function (args) {
+       
+        var skip = (args.currentPage - 1) * grid.pageSettings.pageSize;
+        var take = grid.pageSettings.pageSize; 
+        getData(take, skip);
+    };  
 }
 
 
 // paging
-function begin(args) {
-  
-    if (args.requestType === 'paging') { 
-        var skip = (grid.pageSettings.currentPage - 1) * grid.pageSettings.pageSize;
-        var take = grid.pageSettings.pageSize; 
-        getData(take,skip)  
-        args.cancel = true;
-
-        //console.log(`currentPage : ${grid.pageSettings.currentPage}`);
-        //console.log(`pageCount : ${grid.pageSettings.pageCount}`);
-        //console.log(`pageSize : ${grid.pageSettings.pageSize}`);
-    }
-}
-
-
+function begin(args) {} 
 
 function getData(take = 20, skip = 0) {
     var tdata = [];
 
     var dataSource = new ej.data.DataManager({
         url: 'https://localhost:7056/Home/SyncfusionData',
-        adaptor: new ej.data.ODataAdaptor(),
+        adaptor: new ej.data.WebApiAdaptor(),
         crossDomain: true
     });
 
@@ -448,14 +430,13 @@ function getData(take = 20, skip = 0) {
 
     var res = dataSource.executeQuery(query);
 
-    res.then((e) => { 
+    res.then((e) => {
         e.result.result.forEach(function (item) {
             tdata.push(item);
         });
         tdata.length = e.result.count;
-        grid.dataSource = tdata;
-        console.log(tdata)
+        grid.dataSource = tdata; 
     });
 }
- 
+
 // paging
