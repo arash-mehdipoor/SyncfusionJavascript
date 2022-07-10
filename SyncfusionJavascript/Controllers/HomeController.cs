@@ -50,7 +50,7 @@ namespace SyncfusionJavascript.Controllers
         {
             var data = dbContext.OrderDetails.ToList().Take(10);
 
-            return Json(new { data = data });
+            return Json(new { data });
         }
 
 
