@@ -41,20 +41,7 @@ ej.base.L10n.load({
     }
 });
 
-
-var updateTemplate = function () {
-    this.numeric = new ej.inputs.NumericTextBox({
-        min: 1,
-        max: 3,
-        step: 1,
-        format: '###.##',
-        change: (args) => {
-            var value = args.value;
-            grid.goToPage(value);
-        }
-    });
-    this.numeric.appendTo('#currentPage');
-};
+ 
 
 var grid = new ej.grids.Grid({
     dataSource: getData(10, 0),
@@ -67,6 +54,7 @@ var grid = new ej.grids.Grid({
     pageSettings: { currentPage: 1, pageSize: 5, pageCount: 5, pageSizes: false },
     locale: 'fa-IR',
     enableRtl: true,
+    gridLines: 'Both',
     //allowTextWrap: true,
     toolbar: ['Search'],
     enableStickyHeader: true,
@@ -79,11 +67,11 @@ var grid = new ej.grids.Grid({
     allowPdfExport: true,
     toolbar: ['ExcelExport', 'PdfExport', 'Search', 'ColumnChooser'],
     filterSettings: { type: 'Menu' },
-    editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Batch' },
+    editSettings: { allowEditing: false, allowAdding: false, allowDeleting: false, mode: 'Batch' },
     selectionSettings: { persistSelection: true },
-    enableHover: false,
+    enableHover: true,
     enableHeaderFocus: true,
-    height: 480,
+    //height: 480,
     rowHeight: 60,
     columns: getColumns(),
     queryCellInfo: queryCellInfo,
@@ -283,8 +271,7 @@ function getPdfExportProperties() {
 }
 // excel
 
-function complete(args) {
-    debugger
+function complete(args) { 
     if (args.requestType === "filterchoicerequest") {
         if (args.filterModel.options.field === "Trustworthiness" || args.filterModel.options.field === "Rating" || args.filterModel.options.field === "Status") {
             var span = args.filterModel.dialogObj.element.querySelectorAll('.e-selectall')[0];
@@ -361,8 +348,7 @@ function startTimer(args) {
     clearInterval(intervalFun);
     dtTime = true;
 }
-function valueChange() {
-    debugger
+function valueChange() { 
     listObj.closePopup();
     grid.showSpinner();
     dropSlectedIndex = null;
@@ -416,27 +402,18 @@ function Bound(e) {
 function begin(args) {} 
 
 function getData(take = 20, skip = 0) {
-    var tdata = [];
-
+    var tdata = []; 
     var dataSource = new ej.data.DataManager({
-        url: 'https://localhost:7056/Home/SyncfusionData',
-        adaptor: new ej.data.WebApiAdaptor(),
+        url: `/Home/SyncfusionData`,
+        adaptor: new ej.data.UrlAdaptor(),
         crossDomain: true
-    });
-
-    var query = new ej.data.Query()
-        .addParams('take', take)
-        .addParams('skip', skip);
-
-    var res = dataSource.executeQuery(query);
-
-    res.then((e) => {
+    }).executeQuery(new ej.data.Query().skip(skip).take(take)).then((e) => {
         e.result.result.forEach(function (item) {
             tdata.push(item);
         });
         tdata.length = e.result.count;
-        grid.dataSource = tdata; 
-    });
+        grid.dataSource = tdata;
+    }); 
 }
 
 // paging

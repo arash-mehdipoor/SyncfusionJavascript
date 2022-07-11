@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Syncfusion.EJ2.Base;
 using SyncfusionJavascript.Context;
 using SyncfusionJavascript.Models;
 
@@ -45,10 +46,10 @@ namespace SyncfusionJavascript.Controllers
 
             return RedirectToAction(nameof(SyncfusionTable));
         }
-        [HttpGet]
-        public IActionResult SyncfusionData([FromQuery] int take,int skip)
-        {
-            var data = dbContext.OrderDetails.ToList().Skip(skip).Take(take);
+       
+        public IActionResult SyncfusionData([FromBody] DataManagerRequest request)
+        { 
+            var data = dbContext.OrderDetails.ToList().Skip(request.Skip).Take(request.Take);
             var count = dbContext.OrderDetails.Count();
             var json = Json(new { result = data, count = count });
             return json;
