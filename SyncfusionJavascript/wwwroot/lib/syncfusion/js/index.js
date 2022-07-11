@@ -1,8 +1,11 @@
 ﻿
 
+
+
+
+
+
 ej.base.enableRipple(window.ripple)
-
-
 
 ej.base.L10n.load({
     'fa-IR': {
@@ -38,42 +41,20 @@ ej.base.L10n.load({
     }
 });
 
-
-var tdata = [];
- 
-var dataSource = new ej.data.DataManager({
-    url: 'https://localhost:7056/Home/SyncfusionData',
-    adaptor: new ej.data.ODataAdaptor(),
-    crossDomain: true
-});
-
-var query = new ej.data.Query()
-    .addParams('take', 10)
-    .addParams('skip', 0);
-
-var res = dataSource.executeQuery(query);
-
-res.then((e) => {
-    debugger
-    e.result.data.forEach(function (item) {
-        tdata.push(item);
-    });
-});
-
-
  
 
 var grid = new ej.grids.Grid({
-    dataSource: tdata /*getTradeData(100)*/,
+    dataSource: getData(10, 0),
     allowSelection: true,
     allowFiltering: true,
     allowSorting: true,
     allowPaging: true,
     allowResizing: true,
     allowRowDragAndDrop: true,
-    pageSettings: { pageSize: 5, pageCount: 3 },
+    pageSettings: { currentPage: 1, pageSize: 5, pageCount: 5, pageSizes: false },
     locale: 'fa-IR',
     enableRtl: true,
+    gridLines: 'Both',
     //allowTextWrap: true,
     toolbar: ['Search'],
     enableStickyHeader: true,
@@ -86,19 +67,21 @@ var grid = new ej.grids.Grid({
     allowPdfExport: true,
     toolbar: ['ExcelExport', 'PdfExport', 'Search', 'ColumnChooser'],
     filterSettings: { type: 'Menu' },
-    editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Batch' },
+    editSettings: { allowEditing: false, allowAdding: false, allowDeleting: false, mode: 'Batch' },
     selectionSettings: { persistSelection: true },
-    enableHover: false,
+    enableHover: true,
     enableHeaderFocus: true,
-    height: 480,
+    //height: 480,
     rowHeight: 60,
     columns: getColumns(),
     queryCellInfo: queryCellInfo,
     dataBound: Bound,
     actionBegin: begin,
     actionComplete: complete
-
 });
+
+
+
 var dReady = false;
 var dtTime = false;
 var isDataBound = true;
@@ -115,14 +98,6 @@ grid.appendTo('#Grid');
 grid.on('data-ready', function () {
     dReady = true;
 });
-var listObj = new ej.dropdowns.DropDownList({
-    index: 0,
-    placeholder: 'Select a Data Range',
-    popupHeight: '240px',
-    width: '220px',
-    change: function () { valueChange(); }
-});
-listObj.appendTo('#ddl');
 
 // excel
 grid.toolbarClick = function (args) {
@@ -139,6 +114,8 @@ grid.toolbarClick = function (args) {
 var date = '';
 date += ((new Date()).getMonth().toString()) + '/' + ((new Date()).getDate().toString());
 date += '/' + ((new Date()).getFullYear().toString());
+
+
 
 function getExcelExportProperties() {
     return {
@@ -294,8 +271,7 @@ function getPdfExportProperties() {
 }
 // excel
 
-function complete(args) {
-
+function complete(args) { 
     if (args.requestType === "filterchoicerequest") {
         if (args.filterModel.options.field === "Trustworthiness" || args.filterModel.options.field === "Rating" || args.filterModel.options.field === "Status") {
             var span = args.filterModel.dialogObj.element.querySelectorAll('.e-selectall')[0];
@@ -303,11 +279,7 @@ function complete(args) {
                 ej.base.closest(span, '.e-ftrchk').classList.add("e-hide");
             }
         }
-    }
-
-    //if (args.requestType === "paging") {
-
-    //}
+    } 
 }
 
 window.trustTemp = function (e) {
@@ -369,24 +341,14 @@ function queryCellInfo(args) {
         else {
             args.cell.querySelector(".statusButton").classList.add("btn-danger");
         }
-    }
-    //if (args.column.field === "id") {
-    //    if (args.data.Software <= 20) {
-    //        args.data.Software = args.data.Software + 30;
-    //    }
-    //    args.cell.querySelector(".bar").style.width = args.data.id + "%";
-    //    args.cell.querySelector(".barlabel").textContent = args.data.id + "%";
-    //    if (args.data.status === "Inactive") {
-    //        args.cell.querySelector(".bar").classList.add("progressdisable");
-    //    }
-    //}
+    } 
 }
 function startTimer(args) {
     clearTimeout(clrIntervalFun);
     clearInterval(intervalFun);
     dtTime = true;
 }
-function valueChange() {
+function valueChange() { 
     listObj.closePopup();
     grid.showSpinner();
     dropSlectedIndex = null;
@@ -425,45 +387,33 @@ document.getElementById('Grid').addEventListener('DOMSubtreeModified', function 
 
 
 
-function Bound(e) {
-    var pager = document.getElementsByClassName('e-gridpager')[0].ej2_instances[0];
-    var old = pager.click;
+function Bound(e) { 
+    var pager = document.getElementsByClassName('e-gridpager')[0].ej2_instances[0]; 
     pager.click = function (args) {
-        old.call(this, args);
-        // here you can add conditions 
-        //args.cancel = true;  // cancels the pager refresh  
-    };
+       
+        var skip = (args.currentPage - 1) * grid.pageSettings.pageSize;
+        var take = grid.pageSettings.pageSize; 
+        getData(take, skip);
+    };  
 }
-function begin(args) {
-    debugger
-    if (args.requestType === 'paging') {
-        //this.query = new ej.data.Query()
-        //    .addParams('take', 2)
-        //    .addParams('skip', 10);
 
-        tdata = [];
 
-        var dataSource = new ej.data.DataManager({
-            url: 'https://localhost:7056/Home/SyncfusionData',
-            adaptor: new ej.data.ODataAdaptor(),
-            crossDomain: true
+// paging
+function begin(args) {} 
+
+function getData(take = 20, skip = 0) {
+    var tdata = []; 
+    var dataSource = new ej.data.DataManager({
+        url: `/Home/SyncfusionData`,
+        adaptor: new ej.data.UrlAdaptor(),
+        crossDomain: true
+    }).executeQuery(new ej.data.Query().skip(skip).take(take)).then((e) => {
+        e.result.result.forEach(function (item) {
+            tdata.push(item);
         });
-
-        var query = new ej.data.Query()
-            .addParams('take', 2)
-            .addParams('skip', 10);
-
-        var res = dataSource.executeQuery(query);
-
-        res.then((e) => {
-            e.result.data.forEach(function (item) {
-                tdata.push(item);
-            });
-        });
-
-       /* this.properties.dataSource = tdata;*/
-        console.log(this.properties)
-        //e.cancel = true; // cancels the grid paging 
-         
-    }
+        tdata.length = e.result.count;
+        grid.dataSource = tdata;
+    }); 
 }
+
+// paging

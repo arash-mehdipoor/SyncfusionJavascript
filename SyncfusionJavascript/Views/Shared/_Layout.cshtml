@@ -7,14 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SyncfusionJavascript.styles.css" asp-append-version="true" />
-    <link href="~/lib/syncfusion/css/index.css" rel="stylesheet">
-    <!--syncfusion-->
-    <script type="text/javascript">
-        var themeName = location.hash || 'material';
-        themeName = themeName.replace('#', '');
-        window.ripple = (themeName === "material")
-        document.write('<link href="/lib/syncfusion/css/' + themeName + '.css" rel="stylesheet">');
-    </script>
+        <!--syncfusion--> 
+    <link rel="stylesheet" href="~/lib/syncfusion/css/material.css" asp-append-version="true" />
+    <link href="~/lib/syncfusion/css/index.css" rel="stylesheet" asp-append-version="true">
     <!--syncfusion-->
 </head>
 <body>
@@ -51,7 +46,7 @@
         </div>
         </footer>*@
     @*    <script src="~/lib/jquery/dist/jquery.min.js"></script>*@
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
