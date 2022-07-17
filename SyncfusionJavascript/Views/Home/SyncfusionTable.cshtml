@@ -11,6 +11,10 @@
                 <div class="container-fluid">
                     <div class="control-section">
                         <div class="control-section">
+                            <div id="querybuilder" class="row"></div>
+                            <div class="e-qb-button">
+                                <button id="getdata" class="e-btn e-primary">get Data</button>
+                            </div>
                             <div class="SearchBox">
                                 <input type="text" placeholder="عبارت مورد نظر را تایپ کنید" id="searchText" class="e-input" />
                                 <input type="button" id="searchButton" class="e-control e-btn e-lib" value="جستجو" />
@@ -78,14 +82,14 @@
     const getColumns = function() {
         var columns = [
                 { type: 'checkbox', width: '25' },
-                { field: 'id', visible: true, headerText: 'شناسه کاربر', width: '60', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
-                { field: 'firstName', visible: true, headerText: 'نام', width: '60', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
-                { field: 'lastName', visible: true, headerText: 'نام خانوادگی', width: '60', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
-                { field: 'city', visible: true, headerText: 'شهر', width: '50', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
-                { field: 'address', visible: true, headerText: 'آدرس', width: '150', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
-                { field: 'age', allowFiltering: false, allowSorting: false, headerText: 'سن', width: '50', textAlign: 'center'},
-                { field: 'birthdate', visible: true, headerText: 'تاریخ تولد', width: '150', textAlign: 'center', editType: 'datepickeredit', format: 'yMd', type: 'date' },
-                { field: 'status', visible: true, headerText: 'فعال/ غیرفعال', width: '60',template: '#statusTemplate', textAlign: 'center' },
+                {field: 'id', label: 'id', visible: true, headerText: 'شناسه کاربر', width: '60', type: 'number', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
+                {field: 'firstName', label: 'firstName', visible: true, headerText: 'نام', width: '60', type: 'string', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
+                {field: 'lastName', label: 'lastName', visible: true, headerText: 'نام خانوادگی', width: '60', type: 'string', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
+                {field: 'city', label: 'city', visible: true, headerText: 'شهر', width: '50', type: 'string', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
+                {field: 'address', label: 'address', visible: true, headerText: 'آدرس', width: '150', type: 'string', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
+                {field: 'age', label: 'age', allowFiltering: false, allowSorting: false, headerText: 'سن', type: 'number', width: '50', textAlign: 'center'},
+                {field: 'birthdate', label: 'birthdate', visible: true, headerText: 'تاریخ تولد', width: '150', type: 'string', textAlign: 'center', editType: 'datepickeredit', format: 'yMd', type: 'date' },
+                {field: 'status', label: 'status', visible: true, headerText: 'فعال/ غیرفعال', width: '60', type: 'boolean', values: ['فعال', 'غیر فعال'],template: '#statusTemplate', textAlign: 'center' },
                 //{
                 //    headerText: 'Order Details', columns: [
                 //        { field: 'OrderDate', headerText: 'Order Date', textAlign: 'Right', width: 135, format: 'yMd', minWidth: 10 },
@@ -95,6 +99,7 @@
             ]
             return columns;
     }
+
 
 </script>
 
