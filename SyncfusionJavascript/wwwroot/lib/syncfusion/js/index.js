@@ -93,18 +93,14 @@ document.getElementById("clearButton").addEventListener('click', () => {
 });
 
 var dReady = false;
-var dtTime = false;
-var isDataBound = true;
+var dtTime = false; 
 var isDataChanged = true;
 var intervalFun;
-var clrIntervalFun;
-var clrIntervalFun1;
-var clrIntervalFun2;
-var ddObj;
-var dropSlectedIndex = null;
+var clrIntervalFun;   
 var stTime;
 stTime = performance.now();
 grid.appendTo('#Grid');
+
 grid.on('data-ready', function () {
     dReady = true;
 });
@@ -292,55 +288,7 @@ function complete(args) {
     } 
 }
 
-window.trustTemp = function (e) {
-    if (e.Trustworthiness === "Select All") {
-        return '';
-    }
-    return '<img style="width: 31px; height: 24px" src="//ej2.syncfusion.com/javascript/demos/src/grid/images/' + e.Trustworthiness + '.png" /> <span id="Trusttext">' + e.Trustworthiness + '</span>';
-};
-window.ratingDetail = function (e) {
-    var grid = document.querySelector(".e-grid").ej2_instances[0];
-    var div = document.createElement('div');
-    div.className = 'rating';
-    var span;
-    if (e.Rating === "Select All") {
-        return '';
-    }
-    for (var i = 0; i < 5; i++) {
-        if (i < e.Rating) {
-            span = document.createElement('span');
-            span.className = 'star checked';
-            div.appendChild(span);
-        } else {
-            span = document.createElement('span');
-            span.className = 'star';
-            div.appendChild(span);
-        }
-    }
-    return div.outerHTML;
-};
-window.statusDetail = function (e) {
-    var grid = document.querySelector(".e-grid").ej2_instances[0];
-    var div = document.createElement('div');
-    var span;
-    if (e.Status === "Select All") {
-        return 'Select All';
-    }
-    span = document.createElement('span');
-    if (e.Status === "Active") {
-        span.className = 'statustxt e-activecolor';
-        span.textContent = "Active";
-        div.className = 'statustemp e-activecolor';
-    }
-    if (e.Status === "Inactive") {
-        span = document.createElement('span');
-        span.className = 'statustxt e-inactivecolor';
-        span.textContent = "Inactive";
-        div.className = 'statustemp e-inactivecolor';
-    }
-    div.appendChild(span);
-    return div.outerHTML;
-};
+ 
 function queryCellInfo(args) {
 
     if (args.column.field === 'status') {
@@ -358,26 +306,7 @@ function startTimer(args) {
     clearInterval(intervalFun);
     dtTime = true;
 }
-function valueChange() { 
-    listObj.closePopup();
-    grid.showSpinner();
-    dropSlectedIndex = null;
-    var index = listObj.value;
-    clearTimeout(clrIntervalFun2);
-    clrIntervalFun2 = setTimeout(function () {
-        isDataChanged = true;
-        stTime = null;
-        var contentElement = grid.contentModule.getPanel().firstChild;
-        contentElement.scrollLeft = 0;
-        contentElement.scrollTop = 0;
-        grid.pageSettings.currentPage = 1;
-        stTime = performance.now();
-        grid.dataSource = getTradeData(index);
-        grid.hideSpinner();
-    }, 100);
-}
-
-
+ 
 
 
 document.getElementById('Grid').addEventListener('DOMSubtreeModified', function () {
@@ -393,10 +322,7 @@ document.getElementById('Grid').addEventListener('DOMSubtreeModified', function 
     }
 
 
-});
-
-
-
+}); 
 function Bound(e) { 
     var pager = document.getElementsByClassName('e-gridpager')[0].ej2_instances[0]; 
     pager.click = function (args) {
@@ -413,9 +339,7 @@ function begin(args) {}
 
 function getData(take = 10, skip = 0) {
     var tdata = [];
-    var query = new ej.data.Query();
-    
-
+    var query = new ej.data.Query(); 
     if (searchText.value.length != 0) {
         query.search(searchText.value, ['firstName']).sortBy("Id");
     }
@@ -428,9 +352,11 @@ function getData(take = 10, skip = 0) {
         e.result.result.forEach(function (item) {
             tdata.push(item);
         });
-        tdata.length = e.result.count;
+        tdata.length = e.result.count; 
         grid.dataSource = tdata;
-    }); 
+        new ej.popups.hideSpinner(document.getElementById('loader')); 
+    });
+ 
 }
 
 // paging
