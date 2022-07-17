@@ -41,10 +41,10 @@ ej.base.L10n.load({
     }
 });
 
- 
+var searchText = document.getElementById('searchText');
 
 var grid = new ej.grids.Grid({
-    dataSource: getData(10, 0),
+    dataSource: getData(),
     allowSelection: true,
     allowFiltering: true,
     allowSorting: true,
@@ -80,7 +80,17 @@ var grid = new ej.grids.Grid({
     actionComplete: complete
 });
 
+document.getElementById("searchButton").addEventListener('click', () => {
+    getData();
+});
 
+let cleaeBtn = new ej.buttons.Button();
+cleaeBtn.appendTo('#clearButton')
+
+document.getElementById("clearButton").addEventListener('click', () => {
+    searchText.value = ''
+    getData();
+});
 
 var dReady = false;
 var dtTime = false;
@@ -401,13 +411,20 @@ function Bound(e) {
 // paging
 function begin(args) {} 
 
-function getData(take = 20, skip = 0) {
-    var tdata = []; 
+function getData(take = 10, skip = 0) {
+    var tdata = [];
+    var query = new ej.data.Query();
+    
+
+    if (searchText.value.length != 0) {
+        query.search(searchText.value, ['firstName']).sortBy("Id");
+    }
+
     var dataSource = new ej.data.DataManager({
         url: `/Home/SyncfusionData`,
         adaptor: new ej.data.UrlAdaptor(),
         crossDomain: true
-    }).executeQuery(new ej.data.Query().skip(skip).take(take)).then((e) => {
+    }).executeQuery(query.skip(skip).take(take)).then((e) => {
         e.result.result.forEach(function (item) {
             tdata.push(item);
         });

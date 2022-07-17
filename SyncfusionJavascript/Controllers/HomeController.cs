@@ -46,11 +46,19 @@ namespace SyncfusionJavascript.Controllers
 
             return RedirectToAction(nameof(SyncfusionTable));
         }
-       
+
         public IActionResult SyncfusionData([FromBody] DataManagerRequest request)
-        { 
-            var data = dbContext.OrderDetails.ToList().Skip(request.Skip).Take(request.Take);
-            var count = dbContext.OrderDetails.Count();
+        {
+            var query = dbContext.OrderDetails;
+            var data = query.ToList();
+
+            if (request.Search is not null)
+            {
+                data = data.Where(x => x.FirstName.Contains(request.Search[0].Key)).ToList();
+            }
+
+            var count = data.Count();
+            data = data.Skip(request.Skip).Take(request.Take).ToList();
             var json = Json(new { result = data, count = count });
             return json;
         }
