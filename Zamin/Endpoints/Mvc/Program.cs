@@ -26,7 +26,7 @@ app.Run();
 static Action<DbContextOptionsBuilder> GetDbPathOption()
 {
     string startupPath = Environment.CurrentDirectory;
-    var dbPath = Path.Join(startupPath, "AppDataBase.sqlite");
+    var dbPath = Path.Join(startupPath, "SampleAppDatabase.sqlite");
 
     //var projectPath = Directory.GetParent(startupPath).Parent.Parent.FullName;
 
