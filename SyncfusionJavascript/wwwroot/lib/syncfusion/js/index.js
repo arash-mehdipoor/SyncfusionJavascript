@@ -102,7 +102,7 @@ stTime = performance.now();
 grid.appendTo('#Grid');
 
 grid.on('data-ready', function () {
-    dReady = true;
+    dReady = true; 
 });
 
 // excel
