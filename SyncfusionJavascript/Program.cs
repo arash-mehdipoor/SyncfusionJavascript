@@ -1,9 +1,13 @@
 using SyncfusionJavascript.Context;
+using SyncfusionJavascript.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(op =>
+{
+    op.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
+});
 
 builder.Services.AddDbContext<SyncfusionDbContext>();
 
