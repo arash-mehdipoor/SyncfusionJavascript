@@ -1,4 +1,4 @@
-﻿
+
 
 
 
@@ -23,9 +23,38 @@ ej.base.L10n.load({
             'Excelexport': 'خروجی Excele',
             'Wordexport': 'خروجی Worde',
             'Csvexport': 'خروجی Csvex',
-            'Save': 'ذخیره'
+            'Save': 'ذخیره',
         },
-
+        'querybuilder': {
+            'Equal': 'برابر',
+            'NotEqual': 'نا برابر',
+            'StartsWith': 'شروع می شود با',
+            'EndsWith': 'به پایان می رسد با',
+            'Contains': 'شامل',
+            'AND': 'و',
+            'OR': 'یا',
+            'AddGroup': 'اضافه کردن گروه',
+            'AddCondition': 'اضافه کردن شرط',
+            'DeleteRule': 'این شرایط را حذف کنید',
+            'DeleteGroup': 'حذف گروه',
+            'Edit': 'برای ویرایش',
+            'SelectField': 'یک مورد را انتخاب کنید',
+            'SelectOperator': 'نوع عملیات را انتخاب کنید',
+            'LessThan': 'کمتر از',
+            'LessThanOrEqual': 'کمتر یا مساوی',
+            'GreaterThan': 'بزرگتر از',
+            'GreaterThanOrEqual': 'بزرگتر یا مساوی با',
+            'Between': 'در بین',
+            'NotBetween': 'در این بین نباشد',
+            'In': 'در',
+            'NotIn': 'نباشد در',
+            'Remove': 'پاک کردن',
+            'ValidationMessage': 'این فیلد الزامی است',
+            'IsEmpty': 'خالی باشد',
+            'IsNotEmpty': 'خالی نباشد',
+            'IsNull': 'مقدار نداشته باشد',
+            'IsNotNull': 'مقدار داشته باشد',
+        },
         'pager': {
             'currentPageInfo': '{0} از {1} صفحه',
             'totalItemsInfo': '({0} پست)',
@@ -51,7 +80,7 @@ var grid = new ej.grids.Grid({
     allowPaging: true,
     allowResizing: true,
     allowRowDragAndDrop: true,
-    pageSettings: { currentPage: 1, pageSize: 5, pageCount: 5, pageSizes: false },
+    pageSettings: { currentPage: 1, pageSize: 5, pageCount: 5, pageSizes: true },
     locale: 'fa-IR',
     enableRtl: true,
     gridLines: 'Both',
@@ -80,6 +109,13 @@ var grid = new ej.grids.Grid({
     actionComplete: complete
 });
 
+var columns2 = [
+    { field: 'firstName', label: 'firstName', type: 'string', visible: true, headerText: 'نام', width: '60', clipMode: 'EllipsisWithTooltip', filter: { type: 'CheckBox' }, textAlign: 'center' }
+]
+
+
+
+
 document.getElementById("searchButton").addEventListener('click', () => {
     getData();
 });
@@ -93,16 +129,20 @@ document.getElementById("clearButton").addEventListener('click', () => {
 });
 
 var dReady = false;
-var dtTime = false; 
+var dtTime = false;
+var isDataBound = true;
 var isDataChanged = true;
 var intervalFun;
-var clrIntervalFun;   
+var clrIntervalFun;
+var clrIntervalFun1;
+var clrIntervalFun2;
+var ddObj;
+var dropSlectedIndex = null;
 var stTime;
 stTime = performance.now();
 grid.appendTo('#Grid');
-
 grid.on('data-ready', function () {
-    dReady = true; 
+    dReady = true;
 });
 
 // excel
@@ -277,7 +317,7 @@ function getPdfExportProperties() {
 }
 // excel
 
-function complete(args) { 
+function complete(args) {
     if (args.requestType === "filterchoicerequest") {
         if (args.filterModel.options.field === "Trustworthiness" || args.filterModel.options.field === "Rating" || args.filterModel.options.field === "Status") {
             var span = args.filterModel.dialogObj.element.querySelectorAll('.e-selectall')[0];
@@ -285,10 +325,58 @@ function complete(args) {
                 ej.base.closest(span, '.e-ftrchk').classList.add("e-hide");
             }
         }
-    } 
+    }
 }
 
- 
+window.trustTemp = function (e) {
+    if (e.Trustworthiness === "Select All") {
+        return '';
+    }
+    return '<img style="width: 31px; height: 24px" src="//ej2.syncfusion.com/javascript/demos/src/grid/images/' + e.Trustworthiness + '.png" /> <span id="Trusttext">' + e.Trustworthiness + '</span>';
+};
+window.ratingDetail = function (e) {
+    var grid = document.querySelector(".e-grid").ej2_instances[0];
+    var div = document.createElement('div');
+    div.className = 'rating';
+    var span;
+    if (e.Rating === "Select All") {
+        return '';
+    }
+    for (var i = 0; i < 5; i++) {
+        if (i < e.Rating) {
+            span = document.createElement('span');
+            span.className = 'star checked';
+            div.appendChild(span);
+        } else {
+            span = document.createElement('span');
+            span.className = 'star';
+            div.appendChild(span);
+        }
+    }
+    return div.outerHTML;
+};
+window.statusDetail = function (e) {
+    var grid = document.querySelector(".e-grid").ej2_instances[0];
+    var div = document.createElement('div');
+    var span;
+    if (e.Status === "Select All") {
+        return 'Select All';
+    }
+    span = document.createElement('span');
+    if (e.Status === "Active") {
+        span.className = 'statustxt e-activecolor';
+        span.textContent = "Active";
+        div.className = 'statustemp e-activecolor';
+    }
+    if (e.Status === "Inactive") {
+        span = document.createElement('span');
+        span.className = 'statustxt e-inactivecolor';
+        span.textContent = "Inactive";
+        div.className = 'statustemp e-inactivecolor';
+    }
+    div.appendChild(span);
+    return div.outerHTML;
+};
 function queryCellInfo(args) {
 
     if (args.column.field === 'status') {
@@ -299,14 +387,33 @@ function queryCellInfo(args) {
         else {
             args.cell.querySelector(".statusButton").classList.add("btn-danger");
         }
-    } 
+    }
 }
 function startTimer(args) {
     clearTimeout(clrIntervalFun);
     clearInterval(intervalFun);
     dtTime = true;
 }
- 
+function valueChange() {
+    listObj.closePopup();
+    grid.showSpinner();
+    dropSlectedIndex = null;
+    var index = listObj.value;
+    clearTimeout(clrIntervalFun2);
+    clrIntervalFun2 = setTimeout(function () {
+        isDataChanged = true;
+        stTime = null;
+        var contentElement = grid.contentModule.getPanel().firstChild;
+        contentElement.scrollLeft = 0;
+        contentElement.scrollTop = 0;
+        grid.pageSettings.currentPage = 1; 
+        stTime = performance.now();
+        grid.dataSource = getTradeData(index);
+        grid.hideSpinner();
+    }, 100);
+}
+
+
 
 
 document.getElementById('Grid').addEventListener('DOMSubtreeModified', function () {
@@ -322,26 +429,73 @@ document.getElementById('Grid').addEventListener('DOMSubtreeModified', function 
     }
 
 
-}); 
-function Bound(e) { 
-    var pager = document.getElementsByClassName('e-gridpager')[0].ej2_instances[0]; 
+});
+
+
+
+function Bound(e) {
+    var pager = document.getElementsByClassName('e-gridpager')[0].ej2_instances[0];
     pager.click = function (args) {
-       
+        debugger
         var skip = (args.currentPage - 1) * grid.pageSettings.pageSize;
-        var take = grid.pageSettings.pageSize; 
-        getData(take, skip);
-    };  
+        var take = grid.pageSettings.pageSize;
+
+
+        var validRule = qryBldrObj.getValidRules(qryBldrObj.rule);
+        var predicate = qryBldrObj.getPredicate(validRule);
+        getData(predicate, take, skip);
+    };
 }
 
 
 // paging
-function begin(args) {} 
+function begin(args) {
+    debugger
+}
+var importRules = {
+    condition: 'and',
+    rules: []
+};
 
-function getData(take = 10, skip = 0) {
+var qryBldrObj = new ej.querybuilder.QueryBuilder({
+    width: '100%',
+    dataSource: getData(),
+    columns: getColumns(),
+    locale: 'fa-IR',
+    rule: importRules
+});
+qryBldrObj.appendTo('#querybuilder');
+
+document.getElementById('getdata').onclick = function () {
+    var validRule = qryBldrObj.getValidRules(qryBldrObj.rule);
+    var predicate = qryBldrObj.getPredicate(validRule);
+    predicate.field.toUpperCase();
+    predicate.ignoreCase = false;
+    getData(predicate);
+}
+
+
+
+
+
+
+
+
+
+function getData(predicate, take = 10, skip = 0) {
+    debugger
     var tdata = [];
-    var query = new ej.data.Query(); 
+
+    var query = new ej.data.Query();
+
+
+
     if (searchText.value.length != 0) {
         query.search(searchText.value, ['firstName']).sortBy("Id");
+    }
+
+    if (predicate != null) {
+        query.where(predicate);
     }
 
     var dataSource = new ej.data.DataManager({
@@ -352,11 +506,10 @@ function getData(take = 10, skip = 0) {
         e.result.result.forEach(function (item) {
             tdata.push(item);
         });
-        tdata.length = e.result.count; 
+        tdata.length = e.result.count;
         grid.dataSource = tdata;
-        new ej.popups.hideSpinner(document.getElementById('loader')); 
     });
- 
 }
 
 // paging
+
