@@ -29,33 +29,34 @@
     <script src="~/js/site.js" type="text/javascript"></script>
     <script>
        
-        var tdata = []; 
-        var datam = new ej.data.DataManager(
-            {
-                url: `api/SyncfusionData`,
-                adaptor: new ej.data.WebApiAdaptor(),
-                crossDomain: true
-            })
-            .executeQuery(new ej.data.Query().skip(0).take(2))
-                .then((e) => 
-                {
-                    e.result.queryResult.forEach(
-                        function (item)
-                        {
-                            tdata.push(item);
-                        });
+        const SERVICE_URI = 'api/SyncfusionData';
 
-                    grid.dataSource = tdata;
-                }); 
+        //var tdata = []; 
+        //var datam = new ej.data.DataManager(
+        //    {
+        //        url: SERVICE_URI,
+        //        adaptor: new ej.data.WebApiAdaptor(),
+        //        crossDomain: true
+        //    })
+        //    .executeQuery(new ej.data.Query().skip(0).take(2))
+        //        .then((e) => 
+        //        {
+        //            e.result.queryResult.forEach(
+        //                function (item)
+        //                {
+        //                    tdata.push(item);
+        //                });
+
+        //            grid.dataSource = tdata;
+        //        }); 
 
         
-        const SERVICE_URI: string = 'http://controller.com/actions';
-
 new DataManager({
         adaptor: new CustomDataAdaptor({
                 getData: function(option: AjaxOption) {
                       let xhttp: XMLHttpRequest = new XMLHttpRequest();
                       xhttp.onreadystatechange = function () {
+                          debugger;
                         if (this.readyState == 4) {
                              let request: Object = extend({}, option, { httpRequest: xhttp });
                              if ((xhttp.status >= 200 && xhttp.status <= 299) || xhttp.status === 304) {
@@ -71,9 +72,11 @@ new DataManager({
                     xhttp.send(option.data);
                 }
             })
-    }).executeQuery(new Query().take(8)).then((e) => {
+    }).executeQuery(new Query().take(2)).then((e) => {
+        debugger;
         //e.result will contain the records
     });
+
         
     </script>
 }
