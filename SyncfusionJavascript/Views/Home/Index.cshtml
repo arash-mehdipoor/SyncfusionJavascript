@@ -1,7 +1,46 @@
-﻿@{
+@model TestVm
+@{
     ViewData["Title"] = "Home Page";
 }
 
 
- <h1>Index</h1>
+
+
+<div class="sample-browser">
+    <div class='content @*e-view*@'>
+        <div class='sample-content'>
+            <div class="control-content">
+                <div class="container-fluid">
+                    <div class="control-section">
+                        <div class="control-section">
+                            <div id="Grid"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/lib/syncfusion/js/ej2.min.js"></script>
+    <script>
+       
+        var tdata = []; 
+        var datam = new ej.data.DataManager({
+            url: `api/Order`,
+            adaptor: new ej.data.WebApiAdaptor(),
+            crossDomain: true
+        }).executeQuery(new ej.data.Query().skip(0).take(10)).then((e) => {
+            debugger
+            e.result.queryResult.forEach(function (item) { 
+                tdata.push(item);
+            });
+            grid.dataSource = tdata;
+        }); 
+
+    </script>
+}
 
