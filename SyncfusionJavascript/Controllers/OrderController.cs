@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SyncfusionJavascriptSample.Models;
+using SyncfusionJavascript.Models;
 using Zamin.Core.Contracts.ApplicationServices.Queries;
 using Zamin.Core.Contracts.Data.Queries;
 

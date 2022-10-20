@@ -1,7 +1,7 @@
 using Zamin.Core.Contracts.ApplicationServices.Queries;
 using Zamin.Core.Contracts.Data.Queries;
 
-namespace SyncfusionJavascriptSample.Models;
+namespace SyncfusionJavascript.Models;
 
 
 public class TestVm
@@ -11,6 +11,7 @@ public class TestVm
 
 public class OrdersDetails
 {
+    public int Id { get; set; }
     public int OrderId { get; set; }
     public string CustomerName { get; set; }
     public string EmployeeName { get; set; }

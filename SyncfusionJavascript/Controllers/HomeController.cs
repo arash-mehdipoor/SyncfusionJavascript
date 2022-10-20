@@ -1,13 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Syncfusion.Data;
 using Syncfusion.EJ2.Base;
 using Syncfusion.EJ2.Linq;
 using SyncfusionJavascript.Context;
 using SyncfusionJavascript.Models;
-using System.Collections;
-using System.ComponentModel;
-using System.Linq.Expressions;
-using System.Reflection;
 using Zamin.Core.Contracts.ApplicationServices.Queries;
 
 namespace SyncfusionJavascript.Controllers
@@ -28,35 +23,35 @@ namespace SyncfusionJavascript.Controllers
         public IActionResult SeedData()
         {
 
-            List<OrderDetail> ordersDetails = new List<OrderDetail>();
+            //List<OrdersDetails> ordersDetails = new List<OrdersDetails>();
 
-            if (dbContext.OrderDetails.Count() == 0)
-            {
-                int code = 100;
-                for (int i = 1; i < 100; i++)
-                {
-                    ordersDetails.Add(new OrderDetail()
-                    {
-                        FirstName = $"آرش {i}",
-                        LastName = $"مهدی پور {i}",
-                        Address = $"تهران,تهران {i}",
-                        Age = 29,
-                        Birthdate = DateTime.Now,
-                        City = "تهران",
-                        Status = i % code == 0 ? true : false,
-                    });
-                    code += 5;
-                }
-            }
-            dbContext.OrderDetails.AddRange(ordersDetails);
-            dbContext.SaveChanges();
+            //if (dbContext.OrderDetails.Count() == 0)
+            //{
+            //    int code = 100;
+            //    for (int i = 1; i < 100; i++)
+            //    {
+            //        ordersDetails.Add(new OrdersDetails()
+            //        {
+            //            FirstName = $"آرش {i}",
+            //            LastName = $"مهدی پور {i}",
+            //            Address = $"تهران,تهران {i}",
+            //            Age = 29,
+            //            Birthdate = DateTime.Now,
+            //            City = "تهران",
+            //            Status = i % code == 0 ? true : false,
+            //        });
+            //        code += 5;
+            //    }
+            //}
+            //dbContext.OrderDetails.AddRange(ordersDetails);
+            //dbContext.SaveChanges();
 
             return RedirectToAction(nameof(SyncfusionTable));
         }
 
-        public IActionResult SyncfusionData([FromBody][ModelBinder(Name = "arash", BinderType = typeof(CustomModelBinder))] PageQuery<OrderDetail> request)
+        public IActionResult SyncfusionData([FromBody][ModelBinder(Name = "arash", BinderType = typeof(CustomModelBinder))] PageQuery<OrdersDetails> request)
         {
-            var DataSource = dbContext.OrderDetails.AsQueryable();
+            var DataSource = dbContext.People.AsQueryable();
             DataOperations operation = new DataOperations();
             var count = DataSource.Count();
 
@@ -96,7 +91,7 @@ namespace SyncfusionJavascript.Controllers
 
         public IActionResult SyncfusionTable()
         {
-            var data = dbContext.OrderDetails.ToList();
+            var data = dbContext.People.ToList();
             return View(data);
         }
 

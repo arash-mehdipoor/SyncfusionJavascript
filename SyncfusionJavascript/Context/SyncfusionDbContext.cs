@@ -8,8 +8,8 @@ namespace SyncfusionJavascript.Context
         public SyncfusionDbContext(DbContextOptions<SyncfusionDbContext> options) : base(options)
         {
         }
-
-        public DbSet<OrderDetail> OrderDetails { get; set; }
+         
+        public DbSet<Person> People { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

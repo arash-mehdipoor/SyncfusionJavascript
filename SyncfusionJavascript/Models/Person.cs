@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 
 namespace SyncfusionJavascript.Models
 {
     [ModelBinder(BinderType = typeof(CustomModelBinder))]
-    public class OrderDetail
+    public class Person
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
