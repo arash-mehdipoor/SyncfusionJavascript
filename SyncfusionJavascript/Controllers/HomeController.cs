@@ -90,9 +90,8 @@ namespace SyncfusionJavascript.Controllers
 
 
         public IActionResult SyncfusionTable()
-        {
-            var data = dbContext.People.ToList();
-            return View(data);
+        { 
+            return View();
         }
 
         public IActionResult Index()

@@ -436,7 +436,7 @@ document.getElementById('Grid').addEventListener('DOMSubtreeModified', function 
 function Bound(e) {
     var pager = document.getElementsByClassName('e-gridpager')[0].ej2_instances[0];
     pager.click = function (args) {
-        debugger
+         
         var skip = (args.currentPage - 1) * grid.pageSettings.pageSize;
         var take = grid.pageSettings.pageSize;
 
@@ -450,7 +450,7 @@ function Bound(e) {
 
 // paging
 function begin(args) {
-    debugger
+     
 }
 var importRules = {
     condition: 'and',
@@ -483,7 +483,7 @@ document.getElementById('getdata').onclick = function () {
 
 
 function getData(predicate, take = 10, skip = 0) {
-    debugger
+     
     var tdata = [];
 
     var query = new ej.data.Query();
