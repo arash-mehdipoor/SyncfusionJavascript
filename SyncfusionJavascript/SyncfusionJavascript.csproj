@@ -14,7 +14,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Request.Body.Peeker" Version="1.1.0" />
     <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="20.2.0.36" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zamin\Core\ApplicationService\SampleApp.Core.ApplicationService.csproj" />
+    <ProjectReference Include="..\Zamin\Core\Contracts\SampleApp.Core.Contracts.csproj" />
+    <ProjectReference Include="..\Zamin\Core\Domain\SampleApp.Core.Domain.csproj" />
   </ItemGroup>
 
 </Project>
