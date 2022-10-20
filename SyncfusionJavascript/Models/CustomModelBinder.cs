@@ -15,6 +15,7 @@ public class CustomModelBinder : IModelBinder
         }
 
         var modelType = bindingContext.ModelType;
+        var rawBody = bindingContext.HttpContext.Request.PeekBodyAsync().GetAwaiter().GetResult();
         var body = bindingContext.HttpContext.Request.PeekBody<DataManagerRequest>();
 
         dynamic created = Activator.CreateInstance(modelType);
@@ -24,6 +25,8 @@ public class CustomModelBinder : IModelBinder
         created.SortBy = body.Sorted?.FirstOrDefault().Name ?? "Id";
 
         bindingContext.Result = ModelBindingResult.Success(created);
+        
+        
         return Task.CompletedTask; 
     }
 }

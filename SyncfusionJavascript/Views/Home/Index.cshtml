@@ -30,16 +30,23 @@
     <script>
        
         var tdata = []; 
-        var datam = new ej.data.DataManager({
-            url: `api/Order`,
-            adaptor: new ej.data.WebApiAdaptor(),
-            crossDomain: true
-        }).executeQuery(new ej.data.Query().skip(0).take(10)).then((e) => { 
-            e.result.queryResult.forEach(function (item) { 
-                tdata.push(item);
-            });
-            grid.dataSource = tdata;
-        }); 
+        var datam = new ej.data.DataManager(
+            {
+                url: `api/SyncfusionData`,
+                adaptor: new ej.data.WebApiAdaptor(),
+                crossDomain: true
+            })
+            .executeQuery(new ej.data.Query().skip(0).take(2))
+                .then((e) => 
+                {
+                    e.result.queryResult.forEach(
+                        function (item)
+                        {
+                            tdata.push(item);
+                        });
+
+                    grid.dataSource = tdata;
+                }); 
 
     </script>
 }

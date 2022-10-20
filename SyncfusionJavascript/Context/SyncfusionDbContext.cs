@@ -8,12 +8,17 @@ namespace SyncfusionJavascript.Context
         public SyncfusionDbContext(DbContextOptions<SyncfusionDbContext> options) : base(options)
         {
         }
-         
+
         public DbSet<Person> People { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=syncfusionDB;Integrated Security=true;");
+            modelBuilder.Entity<Person>().HasData(
+                new Person(1,"Arash", "Mahdipour"),
+                new Person(2,"Roya", "Mirzavand"),
+                new Person(3,"Seyed", "Ramezani"),
+                new Person(4,"Sara", "Gohartoor")
+                );
         }
     }
 }

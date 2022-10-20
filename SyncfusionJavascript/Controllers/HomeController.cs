@@ -49,10 +49,12 @@ namespace SyncfusionJavascript.Controllers
             return RedirectToAction(nameof(SyncfusionTable));
         }
 
-        public IActionResult SyncfusionData([FromBody][ModelBinder(Name = "arash", BinderType = typeof(CustomModelBinder))] PageQuery<OrdersDetails> request)
+        public IActionResult SyncfusionData(
+            [FromBody][ModelBinder(BinderType = typeof(CustomModelBinder))] 
+            PageQuery<OrdersDetails> request)
         {
             var DataSource = dbContext.People.AsQueryable();
-            DataOperations operation = new DataOperations();
+            DataOperations operation = new();
             var count = DataSource.Count();
 
 
