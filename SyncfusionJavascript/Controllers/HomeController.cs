@@ -20,35 +20,6 @@ namespace SyncfusionJavascript.Controllers
             this.dbContext = dbContext;
         }
 
-        public IActionResult SeedData()
-        {
-
-            //List<OrdersDetails> ordersDetails = new List<OrdersDetails>();
-
-            //if (dbContext.OrderDetails.Count() == 0)
-            //{
-            //    int code = 100;
-            //    for (int i = 1; i < 100; i++)
-            //    {
-            //        ordersDetails.Add(new OrdersDetails()
-            //        {
-            //            FirstName = $"آرش {i}",
-            //            LastName = $"مهدی پور {i}",
-            //            Address = $"تهران,تهران {i}",
-            //            Age = 29,
-            //            Birthdate = DateTime.Now,
-            //            City = "تهران",
-            //            Status = i % code == 0 ? true : false,
-            //        });
-            //        code += 5;
-            //    }
-            //}
-            //dbContext.OrderDetails.AddRange(ordersDetails);
-            //dbContext.SaveChanges();
-
-            return RedirectToAction(nameof(SyncfusionTable));
-        }
-
         public IActionResult SyncfusionData(
             [FromBody][ModelBinder(BinderType = typeof(CustomModelBinder))] 
             PageQuery<OrdersDetails> request)
@@ -57,7 +28,7 @@ namespace SyncfusionJavascript.Controllers
             DataOperations operation = new();
             var count = DataSource.Count();
 
-
+             
 
             if (request.SkipCount != default)
                 DataSource = operation.PerformSkip(DataSource, request.SkipCount);
