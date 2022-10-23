@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Request.Body.Peeker;
 using Syncfusion.EJ2.Base;
+using System.Linq;
+using System.Reflection;
+using Zamin.Core.Contracts.ApplicationServices.Queries;
 
 namespace SyncfusionJavascript.Models;
 
@@ -15,21 +18,26 @@ public class CustomModelBinder : IModelBinder
         }
 
         var modelType = bindingContext.ModelType;
-
         var rawBody = bindingContext.HttpContext.Request.PeekBodyAsync().GetAwaiter().GetResult();
         var body = bindingContext.HttpContext.Request.PeekBody<DataManagerRequest>();
 
-        var d = modelType.GetGenericTypeDefinition();
 
         dynamic created = Activator.CreateInstance(modelType);
 
-        //foreach (var whereFilter in body.Where)
-        //{
-        //    if (modelType.GetProperty("PageSize"))
-        //    {
 
-        //    }
-        //}
+        var props = modelType.GetProperties().ToList();
+
+        foreach (var whereFilter in body.Where ?? Enumerable.Empty<WhereFilter>()) 
+        {
+            foreach (var prop in props)
+            {
+                if (prop.Name.ToLower() == whereFilter.Field.ToLower())
+                {
+                    prop.SetValue(created, whereFilter.Field, null);
+                }
+            }
+
+        }
 
 
 
@@ -45,7 +53,7 @@ public class CustomModelBinder : IModelBinder
         return Task.CompletedTask;
     }
 
-    
+
 
 }
 

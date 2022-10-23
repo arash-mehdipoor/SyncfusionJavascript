@@ -23,7 +23,7 @@ public class OrderController : ControllerBase
     {
         //PagedData<OrdersDetails> q = OrdersDetails.GetOrderDetails();
         QueryResult<PagedData<OrdersDetails>> queryResult = new QueryResult<PagedData<OrdersDetails>>();
-        queryResult._data = OrdersDetails.GetOrderDetails();
+      //  queryResult._data = OrdersDetails.GetOrderDetails();
 
 
         return queryResult.Data;

@@ -7,6 +7,21 @@ using Zamin.Core.Contracts.ApplicationServices.Queries;
 
 namespace SyncfusionJavascript.Controllers
 {
+    public class TestQr
+    {
+
+    }
+    public class SearchRequestQuery : PageQuery<TestQr>
+    {
+        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public string CustomerName { get; set; }
+        public string EmployeeName { get; set; }
+        public decimal freight { get; set; }
+        public string ShipName { get; set; }
+        public bool Verified { get; set; }
+        public DateTime OrderDate { get; set; }
+    }
 
     public class HomeController : Controller
     {
@@ -21,14 +36,14 @@ namespace SyncfusionJavascript.Controllers
         }
 
         public IActionResult SyncfusionData(
-            [FromBody][ModelBinder(BinderType = typeof(CustomModelBinder))] 
-            PageQuery<OrdersDetails> request)
+            [FromBody][ModelBinder(BinderType = typeof(CustomModelBinder))]
+            SearchRequestQuery request)
         {
             var DataSource = dbContext.People.AsQueryable();
             DataOperations operation = new();
             var count = DataSource.Count();
 
-             
+         
 
             if (request.SkipCount != default)
                 DataSource = operation.PerformSkip(DataSource, request.SkipCount);
