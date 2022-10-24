@@ -427,8 +427,6 @@ document.getElementById('Grid').addEventListener('DOMSubtreeModified', function 
         msgEle.innerHTML = 'Load Time: ' + "<b>" + val + "</b>" + '<b>ms</b>';
         msgEle.classList.remove('e-hide');
     }
-
-
 });
 
 
@@ -473,13 +471,6 @@ document.getElementById('getdata').onclick = function () {
     predicate.ignoreCase = false;
     getData(predicate);
 }
-
-
-
-
-
-
-
 
 
 function getData(predicate, take = 10, skip = 0) {

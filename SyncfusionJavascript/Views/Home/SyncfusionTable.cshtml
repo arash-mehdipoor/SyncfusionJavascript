@@ -91,13 +91,7 @@
                 {field: 'address', label: 'Address', visible: true, headerText: 'آدرس', width: '150', type: 'string', clipMode: 'EllipsisWithTooltip',filter: { type: 'CheckBox' }, textAlign: 'center'},
                 {field: 'age', label: 'Age', allowFiltering: false, allowSorting: false, headerText: 'سن', type: 'number', width: '50', textAlign: 'center'},
                 {field: 'birthdate', label: 'Birthdate', visible: true, headerText: 'تاریخ تولد', width: '150', type: 'string', textAlign: 'center', editType: 'datepickeredit', format: 'yMd', type: 'date' },
-                {field: 'status', label: 'Status', visible: true, headerText: 'فعال/ غیرفعال', width: '60', type: 'boolean', values: ['فعال', 'غیر فعال'],template: '#statusTemplate', textAlign: 'center' },
-                //{
-                //    headerText: 'Order Details', columns: [
-                //        { field: 'OrderDate', headerText: 'Order Date', textAlign: 'Right', width: 135, format: 'yMd', minWidth: 10 },
-                //        { field: 'Freight', headerText: 'Freight($)', textAlign: 'Right', width: 120, format: 'C2', minWidth: 10 },
-                //    ]
-                //},
+                {field: 'status', label: 'Status', visible: true, headerText: 'فعال/ غیرفعال', width: '60', type: 'boolean', values: ['فعال', 'غیر فعال'],template: '#statusTemplate', textAlign: 'center' }
             ]
             return columns;
     }
