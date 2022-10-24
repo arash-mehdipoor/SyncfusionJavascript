@@ -80,7 +80,7 @@ var grid = new ej.grids.Grid({
     allowPaging: true,
     allowResizing: true,
     allowRowDragAndDrop: true,
-    pageSettings: { currentPage: 1, pageSize: 5, pageCount: 5, pageSizes: true },
+    pageSettings: { currentPage: 1, pageSize: 6, pageCount: 5, pageSizes: true },
     locale: 'fa-IR',
     enableRtl: true,
     gridLines: 'Both',

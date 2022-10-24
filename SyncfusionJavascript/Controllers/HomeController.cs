@@ -85,12 +85,6 @@ namespace SyncfusionJavascript.Controllers
 
         public IActionResult SyncfusionTable()
         {
-            for (int i = 10; i < 30; i++)
-            {
-                dbContext.People.Add(new Person(i, $"Arash{i}", $"Mahdipour{i}"));
-            }
-
-            dbContext.SaveChanges();
             return View();
         }
 

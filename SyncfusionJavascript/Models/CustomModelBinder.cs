@@ -23,10 +23,10 @@ public class CustomModelBinder : IModelBinder
 
         MapToQueryProperties(body, created, modelType);
 
-        var pageNumberCacl = (body.Skip / body.Take) + 1;
+        var calcPageNumber = (body.Skip / body.Take) + 1;
 
         _ = modelType.GetProperty("PageSize") is not null ? created.PageSize = body.Take : null;
-        _ = modelType.GetProperty("PageNumber") is not null ? created.PageNumber = pageNumberCacl : null;
+        _ = modelType.GetProperty("PageNumber") is not null ? created.PageNumber = calcPageNumber : null;
         _ = modelType.GetProperty("SortAscending") is not null ? created.SortAscending = true : null;
         _ = modelType.GetProperty("SortBy") is not null ? created.SortBy = body.Sorted?.FirstOrDefault().Name ?? "Id" : null;
 
@@ -45,7 +45,7 @@ public class CustomModelBinder : IModelBinder
                 {
                     if (whereFilter.value is Int64)
                     {
-                        var c = Int32.Parse(whereFilter.value.ToString());
+                        var c = int.Parse(whereFilter.value.ToString());
                         prop.SetValue(created, c, null);
                     }
                     else
