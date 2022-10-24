@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Request.Body.Peeker;
 using Syncfusion.EJ2.Base;
-using System.Linq;
-using System.Reflection;
-using Zamin.Core.Contracts.ApplicationServices.Queries;
 
 namespace SyncfusionJavascript.Models;
 
@@ -24,22 +21,7 @@ public class CustomModelBinder : IModelBinder
 
         dynamic created = Activator.CreateInstance(modelType);
 
-
-        var props = modelType.GetProperties().ToList();
-
-        foreach (var whereFilter in body.Where ?? Enumerable.Empty<WhereFilter>()) 
-        {
-            foreach (var prop in props)
-            {
-                if (prop.Name.ToLower() == whereFilter.Field.ToLower())
-                {
-                    prop.SetValue(created, whereFilter.Field, null);
-                }
-            }
-
-        }
-
-
+        MapToQueryProperties(body, created, modelType);
 
         var pageNumberCacl = (body.Skip / body.Take) + 1;
 
@@ -53,8 +35,28 @@ public class CustomModelBinder : IModelBinder
         return Task.CompletedTask;
     }
 
+    private static void MapToQueryProperties(DataManagerRequest body, dynamic created, Type? type)
+    {
+        foreach (var whereFilter in body.Where ?? Enumerable.Empty<WhereFilter>())
+        {
+            foreach (var prop in type.GetProperties())
+            {
+                if (prop.Name.ToLower() == whereFilter.Field.ToLower())
+                {
+                    if (whereFilter.value is Int64)
+                    {
+                        var c = Int32.Parse(whereFilter.value.ToString());
+                        prop.SetValue(created, c, null);
+                    }
+                    else
+                    {
+                        prop.SetValue(created, whereFilter.value, null);
+                    }
+                }
+            }
 
-
+        }
+    }
 }
 
 public class CustomModelBinderProvider : IModelBinderProvider

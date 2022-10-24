@@ -11,16 +11,22 @@ namespace SyncfusionJavascript.Controllers
     {
 
     }
+
+    public enum StatusEnum
+    {
+        Active,
+        InActive
+    }
     public class SearchRequestQuery : PageQuery<TestQr>
     {
         public int Id { get; set; }
-        public int OrderId { get; set; }
-        public string CustomerName { get; set; }
-        public string EmployeeName { get; set; }
-        public decimal freight { get; set; }
-        public string ShipName { get; set; }
-        public bool Verified { get; set; }
-        public DateTime OrderDate { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string City { get; set; }
+        public string Address { get; set; }
+        public int Age { get; set; }
+        public DateTime Birthdate { get; set; }
+        public StatusEnum Status { get; set; }
     }
 
     public class HomeController : Controller
@@ -43,7 +49,7 @@ namespace SyncfusionJavascript.Controllers
             DataOperations operation = new();
             var count = DataSource.Count();
 
-         
+
 
             if (request.SkipCount != default)
                 DataSource = operation.PerformSkip(DataSource, request.SkipCount);
@@ -62,8 +68,8 @@ namespace SyncfusionJavascript.Controllers
             //}
 
 
-            //if (request.Where != null && request.Where.Count > 0)
-            //{
+            //if (request.Where != null  && request.Where.Count > 0)
+            //{ 
             //    DataSource = operation.PerformFiltering(DataSource, request.Where, "or");
             //}
 
@@ -78,7 +84,13 @@ namespace SyncfusionJavascript.Controllers
 
 
         public IActionResult SyncfusionTable()
-        { 
+        {
+            for (int i = 10; i < 30; i++)
+            {
+                dbContext.People.Add(new Person(i, $"Arash{i}", $"Mahdipour{i}"));
+            }
+
+            dbContext.SaveChanges();
             return View();
         }
 
